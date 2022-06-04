@@ -56,7 +56,7 @@ def calcular():
     global ultima_operacao
 
     ultima_operacao = ''
-    
+
     if not lista_valores_display:
         valor_exibido_display.set(lista_valores_display)
         return
@@ -65,6 +65,7 @@ def calcular():
         resultado = eval(lista_valores_display)
     except SyntaxError:
         valor_exibido_display.set('ERROR')
+        lista_valores_display = ''
     else: 
         valor_exibido_display.set(resultado)
         lista_valores_display = str(resultado)

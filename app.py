@@ -18,9 +18,7 @@ dimy = 384
 main_menu = Tk() #Inicio da aplicação
 
 ultima_operacao = ''
-
 lista_valores_display = ''
-boleano_operacao = False
 valor_exibido_display = StringVar()
 
 #funções
@@ -28,43 +26,56 @@ def exibir_valores(click):
 
     global lista_valores_display 
 
-    lista_valores_display += str(click)
+    if len(lista_valores_display) == 13:
+        valor_exibido_display.set(lista_valores_display)
+        return
 
+    lista_valores_display += str(click)
     #passar para variável e ser exibido.
     valor_exibido_display.set(lista_valores_display)
 
-
 def exibir_operacoes(click): 
-    global boleano_operacao
     global ultima_operacao
     global lista_valores_display
 
-    if ultima_operacao != str(click) and not boleano_operacao:
-        lista_valores_display += str(click)
-        ultima_operacao = str(click)
-        boleano_operacao = True
+    if len(lista_valores_display) == 13:
         valor_exibido_display.set(lista_valores_display)
-    
-    elif ultima_operacao != str(click) and boleano_operacao:
-        lista_valores_display = lista_valores_display[:-1]
+        return
+
+    if ultima_operacao != str(click):
         lista_valores_display += str(click)
         ultima_operacao = str(click)
-        boleano_operacao = False
         #passar para variável e ser exibido.
         valor_exibido_display.set(lista_valores_display)
 
-    else: valor_exibido_display.set(lista_valores_display)
+    else: 
+        valor_exibido_display.set(lista_valores_display)
 
 def calcular():
     global lista_valores_display
-    resultado = eval(lista_valores_display)
-    valor_exibido_display.set(resultado)
-    lista_valores_display = str(resultado)
+    global ultima_operacao
+
+    ultima_operacao = ''
+    
+    if not lista_valores_display:
+        valor_exibido_display.set(lista_valores_display)
+        return
+
+    try:
+        resultado = eval(lista_valores_display)
+    except SyntaxError:
+        valor_exibido_display.set('ERROR')
+    else: 
+        valor_exibido_display.set(resultado)
+        lista_valores_display = str(resultado)
+    
 
 def limpar_display():
     global lista_valores_display
     lista_valores_display = ''
     valor_exibido_display.set(lista_valores_display)
+
+
 
 
 #Centralizando a aplicação ao inciar.
@@ -90,7 +101,7 @@ frame_botao = Frame(main_menu, width=dimx, height=320)
 frame_botao.grid(row=1, column=0)
 
 #Label
-display_label = Label(frame_display, textvariable=valor_exibido_display, bg=cor3, fg=cor2, font='Alarm 24 bold', relief=SOLID, bd=2, anchor=E, justify=RIGHT, padx=3).place(x=0, y=0, width=dimx, height=64)
+display_label = Label(frame_display, textvariable=valor_exibido_display, bg=cor3, fg=cor2, font='Alarm 25 bold', relief=SOLID, bd=2, anchor=E, justify=RIGHT, padx=8).place(x=0, y=0, width=dimx, height=64)
 
 #botões fileira 1
 botao1 = Button(frame_botao, command=limpar_display, text='C', bg=cor4, font='Ivy 20 bold', relief=RAISED, overrelief=RIDGE).place(x=0, y=0, width=128, height=64)
